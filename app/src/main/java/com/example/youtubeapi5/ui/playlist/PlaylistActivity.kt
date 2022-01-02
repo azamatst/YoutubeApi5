@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import com.example.youtubeapi5.R
 import com.example.youtubeapi5.base.BaseActivity
 import com.example.youtubeapi5.databinding.ActivityPlaylistBinding
 import com.example.youtubeapi5.ui.detail.DetailActivity
@@ -23,7 +24,7 @@ class PlaylistActivity : BaseActivity<PlayListViewModel, ActivityPlaylistBinding
             binding.layoutInternet.root.visibility = View.GONE
             binding.recycler.visibility = View.VISIBLE
             val snackbar =
-                Snackbar.make(binding.mainLayout, "Internet Found", Snackbar.LENGTH_SHORT)
+                Snackbar.make(binding.mainLayout, getString(R.string.internet_found), Snackbar.LENGTH_SHORT)
             snackbar.show()
         } else {
             binding.layoutInternet.root.visibility = View.VISIBLE
