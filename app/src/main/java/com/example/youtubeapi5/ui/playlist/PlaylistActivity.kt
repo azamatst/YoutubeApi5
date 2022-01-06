@@ -1,22 +1,23 @@
 package com.example.youtubeapi5.ui.playlist
 
-import android.app.AlertDialog
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.example.youtubeapi5.R
-import com.example.youtubeapi5.base.BaseActivity
+import com.example.youtubeapi5.core.ui.BaseActivity
+import com.example.youtubeapi5.data.local.AppPrefs
 import com.example.youtubeapi5.databinding.ActivityPlaylistBinding
 import com.example.youtubeapi5.ui.detail.DetailActivity
 import com.google.android.material.snackbar.Snackbar
 
 class PlaylistActivity : BaseActivity<PlayListViewModel, ActivityPlaylistBinding>() {
     private lateinit var playlistAdapter: PlaylistAdapter
+    private lateinit var intentDetail: Intent
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +25,11 @@ class PlaylistActivity : BaseActivity<PlayListViewModel, ActivityPlaylistBinding
             binding.layoutInternet.root.visibility = View.GONE
             binding.recycler.visibility = View.VISIBLE
             val snackbar =
-                Snackbar.make(binding.mainLayout, getString(R.string.internet_found), Snackbar.LENGTH_SHORT)
+                Snackbar.make(
+                    binding.mainLayout,
+                    getString(R.string.internet_found),
+                    Snackbar.LENGTH_SHORT
+                )
             snackbar.show()
         } else {
             binding.layoutInternet.root.visibility = View.VISIBLE
@@ -33,16 +38,7 @@ class PlaylistActivity : BaseActivity<PlayListViewModel, ActivityPlaylistBinding
             binding.layoutInternet.tryBtn.setOnClickListener {
                 restartApp()
             }
-
-//            val builder = AlertDialog.Builder(this)
-//            builder.setTitle("App Name")
-//            builder.setMessage("Internet not found")
-//            builder.setNegativeButton("Okay") { dialogInterface, i -> finish() }
-//            builder.setPositiveButton("Try") { dialogInterface, i -> restartApp() }
-//            builder.show()
         }
-
-
     }
 
     private fun haveNetwork(): Boolean {
@@ -69,28 +65,7 @@ class PlaylistActivity : BaseActivity<PlayListViewModel, ActivityPlaylistBinding
 
 
     override fun initView() {
-        super.initView()
-
         viewModel = ViewModelProvider(this).get(PlayListViewModel::class.java)
-    }
-
-    override fun initViewModel() {
-        super.initViewModel()
-
-        viewModel.getPlayList().observe(this) {
-            Log.e("items", "initViewModel: ${it.items}")
-            playlistAdapter = PlaylistAdapter(it.items)
-            binding.recycler.adapter = playlistAdapter
-            playlistAdapter.setOnItem(object : PlaylistAdapter.OnItemClick {
-                override fun onItem(id: String) {
-                    val intent = Intent(this@PlaylistActivity, DetailActivity::class.java)
-                    intent.putExtra(PLAYLIST_ID, id)
-                    startActivity(intent)
-                }
-
-            })
-
-        }
     }
 
     override fun inflateVB(inflater: LayoutInflater): ActivityPlaylistBinding {
@@ -99,5 +74,32 @@ class PlaylistActivity : BaseActivity<PlayListViewModel, ActivityPlaylistBinding
 
     companion object {
         const val PLAYLIST_ID = "playlist id key"
+        const val PLAYLIST_DESC = "playlist desc"
+        const val PLAYLIST_TITLE = "playlist title"
+    }
+
+    override fun initListener() {
+
+    }
+
+    override fun initViewModel() {
+        viewModel.getPlayList().observe(this) {
+            Log.e("items", "initViewModel: ${it.items}")
+            playlistAdapter = PlaylistAdapter(it.items)
+            binding.recycler.adapter = playlistAdapter
+
+            intentDetail = Intent(this@PlaylistActivity, DetailActivity::class.java)
+
+            playlistAdapter.setOnItem(object : PlaylistAdapter.OnItemClick {
+                override fun onItem(id: String, description: String, title: String) {
+                    intentDetail.putExtra(PLAYLIST_ID, id)
+                    intentDetail.putExtra(PLAYLIST_DESC, description)
+                    intentDetail.putExtra(PLAYLIST_TITLE, title)
+                    startActivity(intentDetail)
+                }
+            })
+
+
+        }
     }
 }

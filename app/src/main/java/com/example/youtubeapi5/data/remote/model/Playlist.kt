@@ -1,16 +1,10 @@
-package com.example.youtubeapi5.model
+package com.example.youtubeapi5.data.remote.model
 
 data class Playlist(
     var kind: String,
     var etag: String,
     var items: ArrayList<Items>,
     var pageInfo: PageInfo
-)
-
-data class Thumbnails(
-    var default: Default,
-    var medium: Medium,
-    var high: High
 )
 
 data class Snippet(
@@ -26,7 +20,18 @@ data class Snippet(
     var localized: Localized
 )
 
-data class PageInfo(
+data class ContentDetails(
+    var duration: String,
+    var dimension: String,
+    var definition: String,
+    var caption: String,
+    var licensedContent: Boolean,
+    var contentRating: ContentRating,
+    var projection: String,
+    var itemCount: Int,
+)
+
+data class PageInfo( //кол-во видео
     var totalResults: Int,
     var resultsPerPage: Int
 )
@@ -50,6 +55,14 @@ data class Items(
     var contentDetails: ContentDetails
 )
 
+data class ContentRating(val name: String = "")
+
+data class Thumbnails(
+    var default: Default,
+    var medium: Medium,
+    var high: High
+)
+
 data class High(
     var url: String,
     var width: Int,
@@ -60,17 +73,4 @@ data class Default(
     var url: String,
     var width: Int,
     var height: Int
-)
-
-data class ContentRating(val name: String = "")
-
-data class ContentDetails(
-    var duration: String,
-    var dimension: String,
-    var definition: String,
-    var caption: String,
-    var licensedContent: Boolean,
-    var contentRating: ContentRating,
-    var projection: String,
-    var itemCount: Int,
 )

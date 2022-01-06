@@ -1,7 +1,6 @@
-package com.example.youtubeapi5.base
+package com.example.youtubeapi5.core.ui
 
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
@@ -24,15 +23,9 @@ abstract class BaseActivity<VM : BaseViewModel, VB : ViewBinding> : AppCompatAct
     }
 
 
-    open fun initViewModel() {
+    abstract fun initViewModel()
 
-    }
+    abstract fun initListener()
 
-    open fun initListener() {
-
-    }
-
-    open fun initView() {
-
-    }
+    abstract fun initView()
 }

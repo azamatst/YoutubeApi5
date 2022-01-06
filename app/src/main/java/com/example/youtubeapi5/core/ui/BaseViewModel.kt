@@ -1,4 +1,4 @@
-package com.example.youtubeapi5.base
+package com.example.youtubeapi5.core.ui
 
 import androidx.lifecycle.ViewModel
 
